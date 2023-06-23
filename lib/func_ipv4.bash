@@ -172,6 +172,7 @@ function func_ipv4_form_netmask(){
 	elif result=$(func_ipv4_cidr_to_netmask $1); then
 		echo "${result}" && true && return
 	fi
+ 	false
 }
 
 
