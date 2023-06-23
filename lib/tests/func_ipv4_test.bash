@@ -1,21 +1,23 @@
 #!/bin/bash
 #
-# ctype_ord_test.bash
+# func_ipv4_test.bash
 #
-# Testscript für ctype_ord.bash
+# Testscript für func_ipv4.bash
 #
-# 2023-06-22 22:37 CEST	Oliver Lenz	Initial
+# 2023-06-23 18:37 CEST	Oliver Lenz	Initial
 # 2023-06-23 20:57 CEST Oliver Lenz     Generalisieren der Testlogik.
 #
 
-testfile="../ctype_ord.bash"
+
+testfile="../func_ipv4.bash"
 . ./${testfile}
 
 
 testdataset=(
-	'' ' ' '-' '+' '-2147483648' '-32768' '-128' '-0' '+0' '01' '-1' '-01' '-1.0' 
-	'0' '1' '2' '+1' '-1.0' '+1.0' '1.0' 
-	'127' '128' '255' '256' '32767' '32768' '65535' '65536' '2147483647' '2147483648' '4294967295' '4294967296'
+	' ' '-1' '0' '1' '32' '33' 
+	'172.0.0.1' 'localhost' 'localhost.local' 
+	'10.0.0.0' '10.0.0.1' '010.0.0.1' '192.168.0.0' '192.168.0.1' '255.128.0.0' 
+	'3232235521' '255.255.255.255'
 )
 
 (
@@ -32,4 +34,4 @@ testdataset=(
 		done
 	done< <(grep -E "^[ \t]*(|function )([a-zA-Z0-9_]+)\(" "${testfile}")
 
-) 2>&1  | tee "${0%%.bash}.txt"
+) 2>&1 | tee "${0%%.bash}.txt"
