@@ -5,6 +5,7 @@
 # Numerische Testtypen in Bash
 #
 # 2023-06-22 22:39 CEST	 Oliver Lenz	Initial
+# 2023-06-23 21:39 CEST	 Oliver Lenz	Update clean_value -> so gehts schneller
 #
 
 
@@ -17,9 +18,10 @@
 # +00.100 == 0.1
 #
 function clean_value(){
-	if [[ ${1} =~ ^([+-]{0,1})([0-9]+)(|\.[0-9]*)$ ]]; then
-		(( a=${1}+0 ))
-		(( a == $1 )) && echo $a && true
+	if [[ ${1} =~ ^([+-]{0,1})([0]*)([0-9]+)(|\.[0-9]*)$ ]]; then
+		value="${BASH_REMATCH[1]}${BASH_REMATCH[3]}"
+		value="${value##+}"
+		echo ${value} && true && return
 	fi
 	false
 }
@@ -97,7 +99,7 @@ function ctype_smallint(){
 
 #
 # Reelle Zahlen
-# z.B. -1.234 .. 0 .. 1.234
+# z.B. -1,234 .. 0 .. 1,234
 #
 function ctype_realnum(){
 	[[ "${1}" == "0" || "${1:0:1}" != "0" && "${1}" =~ ^(-|)([0-9]+)(|\.[0-9]+)$ && "${BASH_REMATCH[0]}" == "${1}" ]] && true || false

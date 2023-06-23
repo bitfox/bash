@@ -5,6 +5,7 @@
 # IPv4 Testtypen in Bash
 #
 # 2023-06-22 23:49 CEST	 Oliver Lenz	Initial
+# 2023-06-23 21:37 CEST	 Oliver Lenz	Update ipv4 netmask => so gehts schneller
 #
 
 
@@ -51,8 +52,8 @@ ctype_ipv4_netmask(){
 			done
 		done
 		i=0 
-		while [ ${s:0:1} == "1" ]; do (( i+=1 )); s=${s:1}; done
-		while [ ${s:0:1} == "0" ]; do (( i+=1 )); s=${s:1}; done
+		while [ "${s:0:1}" == "1" ]; do (( i+=1 )); s=${s:1}; done
+		while [ "${s:0:1}" == "0" ]; do (( i+=1 )); s=${s:1}; done
 		[ $i -eq 32 ] && true && return
 	fi
 	false
