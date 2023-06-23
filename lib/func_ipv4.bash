@@ -17,7 +17,13 @@ func_load_ipv4_libs() {
 		local owd=$(pwd) scriptdir=$( readlink “${0}” ) ; 
 		[ -n ${SCRIPTDIR} ] && cd "$( dirname "${SCRIPTDIR}" )" || cd "$(dirname $0)"
 		SCRIPTDIR=$( pwd ) && cd ${owd}
-		. ./ctype_ipv4.bash
+		fn="${SCRIPTDIR}/ctype_ipv4.bash"
+		if [ -f "${fn}" ]; 
+			. ${fn}
+		else
+			echo "Bibliothek ${fn} nicht gefunden."
+			exit 8
+		fi
 	fi
 }
 func_load_ipv4_libs
