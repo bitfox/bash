@@ -23,6 +23,7 @@ while read zeile; do
       for devicepath in $(ls -1 /dev/sd[a-z]); do
         if [ "$( udevadm info ${devicepath} | grep -e "E: ID_MODEL_ID=${usb_model_id}$" -e "E: ID_VENDOR_ID=${usb_vendor_id}$" -e "E: ID_SERIAL_SHORT=${usb_serial}$" | wc -l )" == "3" ]; then
           echo -e "\tDevicePath: ${devicepath}\n\tSerial:     ${usb_serial}"
+          [[ "$(udevadm info ${devicepath} | grep -m1 "^S: disk/by-path/pci-" )" =~ ^S:\ disk/by-path/(pci-([0-9\:\.]+)-usb-([0-9\:\.]+)-scsi-([0-9\:]+))  ]] && echo -e "\tUSB-Port:   ${BASH_REMATCH[1]}"
           break
         fi
       done
