@@ -22,7 +22,7 @@ while read zeile; do
     if [ ! -z "${usb_serial}" ]; then
       for devicepath in $(ls -1 /dev/sd[a-z]); do
         if [ "$( udevadm info ${devicepath} | grep -e "E: ID_MODEL_ID=${usb_model_id}$" -e "E: ID_VENDOR_ID=${usb_vendor_id}$" -e "E: ID_SERIAL_SHORT=${usb_serial}$" | wc -l )" == "3" ]; then
-          echo -e "\tSerial: ${usb_serial}\n\tDevice: ${devicepath}"
+          echo -e "\tDevicePath: ${devicepath}\n\tSerial:     ${usb_serial}"
           break
         fi
       done
