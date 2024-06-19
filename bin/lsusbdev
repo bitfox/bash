@@ -31,4 +31,4 @@ while read zeile; do
   else
     echo "FAIL: ${zeile}"
   fi
-done< <(  lsusb -v | grep -E "^Bus|idVendor|idProduct|iSerial" )
+done< <(  lsusb -v 2>/dev/null | grep -E "^Bus|idVendor|idProduct|iSerial" )
