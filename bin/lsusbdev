@@ -1,0 +1,36 @@
+#!/bin/env bash
+#
+# lsusbdev
+#
+# Auflisten von USB-Geräten und zugeordneten Device-Pathes
+#
+# 2024-06-19 Oliver Lenz, Bitfox        Initial
+#
+#
+written=0
+while read zeile; do
+  if [[ ${zeile} =~ ^Bus\ [0-9]+\ Device\ [0-9]+:\ ID\ ([0-9a-f]+):([0-9a-f]+)\ (.*)   ]]; then
+    usb_line="${zeile}"
+    usb_vendor_id="${BASH_REMATCH[1]}"
+    usb_model_id="${BASH_REMATCH[2]}"
+    usb_info_str="${BASH_REMATCH[3]}"
+  elif  [[ "${zeile}" =~ idVendor[\ \s\t]+0x${usb_vendor_id}[\ ]*(.*) ]]; then
+    usb_vendor_str=${BASH_REMATCH[1]}
+  elif  [[ "${zeile}" =~ idProduct[\ \s\t]+0x${usb_model_id}[\ ]*(.*) ]]; then
+    usb_product_str=${BASH_REMATCH[1]}
+  elif  [[ "${zeile}" =~ iSerial[\ \s\t]+[0-9]+[\ ]*(.*) ]]; then
+    usb_serial="${BASH_REMATCH[1]}"
+    echo "${usb_line}"
+    if [ ! -z "${usb_serial}" ]; then
+      for devicepath in $(ls -1 /dev/sd[a-z]); do
+        matches="$( udevadm info ${devicepath} | grep -e "E: ID_MODEL_ID=${usb_model_id}$" -e "E: ID_VENDOR_ID=${usb_vendor_id}$" -e "E: ID_SERIAL_SHORT=${usb_serial}$" | wc -l )"
+        if [ "${matches}" == "3" ]; then
+          echo -e "\tSerial: ${usb_serial}\n\tDevice: ${devicepath}"
+          break
+        fi
+      done
+    fi
+  else
+    echo "FAIL: ${zeile}"
+  fi
+done< <(  lsusb -v | grep -E "^Bus|idVendor|idProduct|iSerial" )
