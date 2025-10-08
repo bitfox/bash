@@ -8,6 +8,6 @@ function last_rpmupdate(){
   done< <( rpm -qa --last 2>/dev/null | sed -E 's/^[^ ]+//g' | sed -E 's/^[ ]+(.*)/\1/g' | uniq ) | sort | uniq | tail -1 -
 }
 
-function foreman_get_proxies(){ 
+function foreman_hammer_get_proxies(){ 
   hammer --output csv --no-headers proxies list --fields="name" 
 }
